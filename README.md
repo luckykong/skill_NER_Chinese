@@ -21,7 +21,7 @@ python predict.py 熟悉常用中间件，包括但不限于Redis、Kafka、Zook
 
 # 训练
 
-前往https://huggingface.co/hfl/chinese-roberta-wwm-ext/tree/main下载config.json, pytorch_model.bin, vocab.txt
+前往[https://huggingface.co/hfl/chinese-roberta-wwm-ext/tree/main](https://huggingface.co/hfl/chinese-roberta-wwm-ext/tree/main)下载config.json, pytorch_model.bin, vocab.txt
 
 放到./model_hub/chinese-roberta-wwm-ext下；切换model.py和training.py的traininin stage代码。
 

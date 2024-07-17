@@ -3,6 +3,7 @@ import json
 import torch
 import numpy as np
 import argparse
+import chardet
 
 from collections import namedtuple
 from model import BertNer
@@ -10,8 +11,22 @@ from seqeval.metrics.sequence_labeling import get_entities
 from transformers import BertTokenizer
 
 
+
+
+def detect_file_encoding(file_path):
+    # 读取文件的一部分字节来检测编码
+    with open(file_path, 'rb') as file:
+        raw_data = file.read(5000)  # 读取前5000字节来进行编码检测
+    result = chardet.detect(raw_data)
+    encoding = result['encoding']
+    # confidence = result['confidence']  # 置信度
+    # print(f"Detected encoding: {encoding} with confidence: {confidence}")
+    return encoding
+
+
 def get_args(args_path, args_name=None):
-    with open(args_path, "r") as fp:
+    encoding = detect_file_encoding(args_path) # 检测文件编码
+    with open(args_path, "r", encoding=encoding, errors="replace") as fp:
         args_dict = json.load(fp)
     # 注意args不可被修改了
     args = namedtuple(args_name, args_dict.keys())(*args_dict.values())
@@ -30,7 +45,7 @@ class Predictor:
         self.max_seq_len = self.ner_args.max_seq_len
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.ner_model = BertNer(self.ner_args)
-        self.ner_model.load_state_dict(torch.load(os.path.join(self.ner_args.output_dir, "pytorch_model_ner.bin")))
+        self.ner_model.load_state_dict(torch.load(os.path.join(self.ner_args.output_dir, "pytorch_model_ner.bin"), map_location=self.device))
         self.ner_model.to(self.device)
         self.data_name = data_name
 

@@ -11,6 +11,8 @@
 
 已训练的pytorch_model_ner.bin下载：链接：https://share.weiyun.com/v6o317Bj 密码：y4y2dr
 
+> 或者使用 release 中的模型备份
+
 放到./checkpoint/skill下。
 
 命令行直接输入待抽取语句作为参数并运行，如：
